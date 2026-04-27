@@ -45,7 +45,11 @@ elif [[ $HOST_ARCH == "x86_64" ]]
 then
     ARCH="x86_64"
     LD_LIB="${JUNEST_HOME}/lib64/ld-linux-x86-64.so.2"
-elif [[ $HOST_ARCH =~ .*(arm).* ]] || [[ $HOST_ARCH == "aarch64" ]]
+elif [[ $HOST_ARCH == "aarch64" ]]
+then
+    ARCH="arm"
+    LD_LIB="${JUNEST_HOME}/lib/ld-linux-aarch64.so.1"
+elif [[ $HOST_ARCH =~ .*(arm).* ]]
 then
     ARCH="arm"
     LD_LIB="${JUNEST_HOME}/lib/ld-linux-armhf.so.3"
@@ -56,7 +60,12 @@ fi
 MAIN_REPO=https://github.com/Kreijstal/artixnest/releases/download/rootfs
 ENV_REPO=${MAIN_REPO}
 # shellcheck disable=SC2016
-DEFAULT_MIRROR='https://mirrors.gigenet.com/artixlinux/$repo/os/$arch'
+if [[ $ARCH == "arm" ]]
+then
+    DEFAULT_MIRROR='https://armtix.artixlinux.org/repos/$repo/os/$arch'
+else
+    DEFAULT_MIRROR='https://mirrors.gigenet.com/artixlinux/$repo/os/$arch'
+fi
 
 ORIGIN_WD=$(pwd)
 
