@@ -26,7 +26,7 @@ function _run_env_with_qemu(){
     local backend_args="$2"
     shift 2
 
-    source "${JUNEST_HOME}"/etc/junest/info
+    source "${JUNEST_HOME}"/etc/${CMD}/info
 
     if [ "$JUNEST_ARCH" != "$ARCH" ]
     then

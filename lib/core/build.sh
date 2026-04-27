@@ -73,6 +73,13 @@ function build_image_env(){
 [junest]
 SigLevel = Optional TrustedOnly
 Server = https://raw.githubusercontent.com/fsquillace/junest-repo/master/any
+
+[system]
+Include = /etc/pacman.d/mirrorlist
+[world]
+Include = /etc/pacman.d/mirrorlist
+[galaxy]
+Include = /etc/pacman.d/mirrorlist
 EOT
     info "pacman.conf being used:"
     cat "${maindir}"/root/etc/pacman.conf
@@ -96,12 +103,7 @@ EOT
     sudo bash -c "echo LANG=\"en_US.UTF-8\" >> ${maindir}/root/etc/locale.conf"
 
     info "Setting up the pacman keyring (this might take a while!)..."
-    if [[ $(uname -m) == *"arm"* ]]
-    then
-        sudo pacman -S --noconfirm --root "${maindir}"/root archlinuxarm-keyring
-    else
-        sudo pacman -S --noconfirm --root "${maindir}"/root archlinux-keyring
-    fi
+    sudo pacman -S --noconfirm --root "${maindir}"/root artix-keyring
     sudo mount --bind "${maindir}"/root "${maindir}"/root
     sudo arch-chroot "${maindir}"/root bash -c '
     set -e

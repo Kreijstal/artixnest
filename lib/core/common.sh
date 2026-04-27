@@ -9,9 +9,9 @@
 #
 # vim: ft=sh
 
-NAME='JuNest'
-CMD='junest'
-DESCRIPTION='The Arch Linux based distro that runs upon any Linux distros without root access'
+NAME='ArtixNest'
+CMD='artixnest'
+DESCRIPTION='The Artix Linux based distro that runs upon any Linux distros without root access'
 
 NOT_AVAILABLE_ARCH=102
 NOT_EXISTING_FILE=103
@@ -53,11 +53,10 @@ else
     die "Unknown architecture ${HOST_ARCH}"
 fi
 
-MAIN_REPO=https://link.storjshare.io/s/jvb5tgarnjtt565fffa44spvyuga/junest-repo
-MAIN_REPO=https://pub-a2af2344e8554f6c807bc3db355ae622.r2.dev
-ENV_REPO=${MAIN_REPO}/${CMD}
+MAIN_REPO=https://github.com/Kreijstal/artixnest/releases/download/rootfs
+ENV_REPO=${MAIN_REPO}
 # shellcheck disable=SC2016
-DEFAULT_MIRROR='https://mirror.rackspace.com/archlinux/$repo/os/$arch'
+DEFAULT_MIRROR='https://mirrors.gigenet.com/artixlinux/$repo/os/$arch'
 
 ORIGIN_WD=$(pwd)
 
@@ -221,7 +220,7 @@ function check_nested_env() {
 #   None
 #######################################
 function check_same_arch() {
-    source "${JUNEST_HOME}"/etc/junest/info
+    source "${JUNEST_HOME}"/etc/${CMD}/info
     [ "$JUNEST_ARCH" != "$ARCH" ] && \
         die_on_status $ARCHITECTURE_MISMATCH "The host system architecture is not correct: $ARCH != $JUNEST_ARCH"
     return 0
@@ -319,16 +318,9 @@ function prepare_archlinux() {
 
     $sudo pacman-key --init
 
-    if [[ $(uname -m) == *"arm"* ]]
-    then
-        # shellcheck disable=SC2086
-        $sudo pacman $pacman_options -S archlinuxarm-keyring
-        $sudo pacman-key --populate archlinuxarm
-    else
-        # shellcheck disable=SC2086
-        $sudo pacman $pacman_options -S archlinux-keyring
-        $sudo pacman-key --populate archlinux
-    fi
+    # shellcheck disable=SC2086
+    $sudo pacman $pacman_options -S artix-keyring
+    $sudo pacman-key --populate artix
 
     # shellcheck disable=SC2086
     $sudo pacman $pacman_options -Su
